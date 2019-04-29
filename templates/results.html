@@ -11,45 +11,48 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <style>
-            div#wrapperHeader {
-                width:100%;
-                height:100%; /* height of the background image? */
-                background:url(images/header.png) repeat-x 0 0;
-                text-align:center;
-                }
+                div#wrapperHeader {
+                    width:100%;
+                    height:100%; /* height of the background image? */
+                    text-align:center;
+                    }
+    
+                div#wrapperHeader div#header {
+                    width:100%;
+                    height:100%;
+                    margin:0 auto;
+                    }
+    
+                div#wrapperHeader div#header img {
+                    width:100%;/* the width of the logo image */
+                    height:450px; /* the height of the logo image */
+                    margin:0 auto;
+                    }
+                div#searchbar {
+                    margin: 0 auto;
+                    width: 100%;
+                    background:lightslategray;
+                }    
+            </style>
+        </head>
+        <body>
+            <div id="wrapperHeader">
+                <div id="header">
+                 <img src="/static/banner.jpg" alt="logo" />
+                </div> 
+               </div>
+               <form method = "GET">
+                    <div id="searchbar">
+                        <input type="text" id="searchByName">
+                        <input type="button" value = "Search By Name" id="searchname">
+                        <input type="text" id="searchByType">
+                        <input type="button" value = "Search By Type" id="searchtype">
+                    </div>
+    
+                </form>
+        
 
-            div#wrapperHeader div#header {
-                width:100%;
-                height:100%;
-                margin:0 auto;
-                }
-
-            div#wrapperHeader div#header img {
-                width:100%;/* the width of the logo image */
-                height:450px; /* the height of the logo image */
-                margin:0 auto;
-                }
-        </style>
-    </head>
-    <body>
-        <div id="wrapperHeader">
-            <div id="header">
-             <img src="../static/banner.jpg" alt="logo" />
-            </div> 
-           </div>
-           {% from "_formhelpers.html" import render_field %}
-
-            <form method=post>
-
-            <dl>
-                {{ render_field(form.select) }}
-                {{ render_field(form.search) }}
-
-            </dl>
-
-            <p><input type=submit value=Search>
-
-            </form>
+            
             <table class="table table-dark">
                 <tr>
                     <th class="thead-dark"> Pokemon Name </th>
@@ -75,13 +78,24 @@
                     <td>{{ result.special_def }}</td>
                     <td>{{ result.hp }}</td>
                     <td>{{ result.speed }}</td>
-                    <td><img src= {{ result.image }}> </td>
+                    <td><img src={{ result.image }}> </td>
                 </tr>
             {% endfor %}
             </tr>
             </table>
-        
-        
+            <script type="text/javascript">
+                document.getElementById("searchname").onclick = function() {
+                var search = document.getElementById("searchByName");
+                apiRoute = 'http://127.0.0.1:5000/results/name/' + search.value;
+                location.href = apiRoute;
+               }
+                document.getElementById("searchtype").onclick = function() {
+                var search = document.getElementById("searchByType");
+                apiRoute = 'http://127.0.0.1:5000/results/type/' + search.value;
+                location.href = apiRoute;
+               }
+                
+            </script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, jsonify
 from flask_pymongo import PyMongo
-from forms import pokeSearchForm
 from key import SECRET_KEY
+import os
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'pokemon_db'
@@ -14,30 +14,22 @@ db = PyMongo(app)
 
 @app.route("/", methods = ["GET", "POST"])
 def homepage():
-    search = pokeSearchForm(request.form)
-    if request.method == 'POST':
-        return search_results(search)
     result = db.db.pokemon.find()
-    return render_template("index.html", types = result, form=search)
+    return render_template("index.html", types = result)
 
-@app.route('/results.html')
+@app.route('/results/name/<search>', methods = ["GET", "POST"] )
 
 def search_results(search):
-
-    results = []
-    search_string = request.form['search']
-    if search.data['search'] == '':
-        qry = db.db.pokemon.find()
-        results = qry
-    if not results:
-        flash('No results found!')
-
-        return redirect('/')
-
-
-    qry = db.db.pokemon.find({'name': search_string  })
+    name = search
+    qry = db.db.pokemon.find({'name': name})
     return render_template('results.html', results=qry)
 
+@app.route('/results/type/<typesearch>', methods = ["GET", "POST"] )
+
+def type_results(typesearch):
+    type_ = typesearch
+    qry = db.db.pokemon.find({'type': type_ })
+    return render_template('type.html', results=qry)
 
 if __name__ == '__main__':
     app.run(debug=True)
